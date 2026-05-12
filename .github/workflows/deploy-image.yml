@@ -1,7 +1,20 @@
-- name: Stop and remove
+name: Deploy Image
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Stop and remove existing container
         run: |
           docker stop simple-app-container || true
           docker rm -f simple-app-container || true
 
-      - name: Start container
+      - name: Run new container
         run: docker run -d --name simple-app-container -p 8080:80 ${{ secrets.DOCKER_USER }}/2048-hmad91:latest
