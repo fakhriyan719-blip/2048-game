@@ -1,0 +1,7 @@
+- name: Stop and remove
+        run: |
+          docker stop simple-app-container || true
+          docker rm -f simple-app-container || true
+
+      - name: Start container
+        run: docker run -d --name simple-app-container -p 8080:80 ${{ secrets.DOCKER_USER }}/2048-hmad91:latest
