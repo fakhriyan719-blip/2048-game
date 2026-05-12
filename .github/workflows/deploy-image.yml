@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -11,11 +12,18 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Stop and remove existing container
+      - name: Cleanup and Start Container
         run: |
+          # Berhenti dan hapus kontainer lama jika ada
           docker stop simple-app-container || true
           docker rm -f simple-app-container || true
-
-      - name: Run new container
-        run: docker run -d --name simple-app-container -p 8080:80 ${{ secrets.DOCKER_USER }}/2048-hmad91:latest
-# Trigger update
+          
+          # Hapus image lama agar selalu pull yang terbaru
+          docker rmi ${{ secrets.DOCKER_USER }}/2048-hmad91:latest || true
+          
+          # Jalankan kontainer di port 9999 (Sesuai Grading)
+          docker run -d \
+            --name simple-app-container \
+            -p 9999:80 \
+            --restart always \
+            ${{ secrets.DOCKER_USER }}/2048-hmad91:latest
