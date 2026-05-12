@@ -18,3 +18,4 @@ jobs:
 
       - name: Run new container
         run: docker run -d --name simple-app-container -p 8080:80 ${{ secrets.DOCKER_USER }}/2048-hmad91:latest
+# Trigger update
